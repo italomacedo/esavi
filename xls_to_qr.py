@@ -56,6 +56,7 @@ for index, row in df.iterrows():
     DataUltimaMenstruacao = row['Data ultima menstruacao']
     DataParto = row['Data parto']
     IdadeGestacional = row['Idade gestacional']
+    CodigoMonitoreoPosteriorVacuna = row['codigoMonitoreoPosteriorVacuna']
     NomeMedicamento = row['Nome medicamento']
     SistemaMedicamento = row['Sistema medicamento (URI)']
     CodigoMedicamento = row['Codigo medicamento']
@@ -93,7 +94,7 @@ for index, row in df.iterrows():
     DataESAVI = row['Data ESAVI']
     HoraESAVI = row['Hora ESAVI']
     DescricaoESAVI = row['Descricao ESAVI']
-    GravidaMomentoESAVI = row['Gravida momento ESAVI (boolean)']
+    GravidezVacinacao = row['Gravida momento ESAVI (boolean)']
     CodigoGravidesDuranteESAVI = row[
         'Codigo gravides durante ESAVI (http://paho.org/esavi/ValueSet/RespuestaSiNoNosabeVS)']
     DataUltimaMenstruacao = row['Data ultima menstruacao']
@@ -307,35 +308,62 @@ for index, row in df.iterrows():
                 "linkId": "antecedentesMedicos",
                 "item": [
                     {
-                        "linkId": "antecedentesEnfermedadesPrevias",
+                        "linkId": "pacienteEmbarazada",
                         "item": [
                             {
-                                "linkId": "descripcionEnfPrevia",
+                                "linkId": "embarazadaMomentoVacuna",
                                 "answer": [
                                     {
-                                        "valueString": DoencaPrevia
+                                        "valueBoolean": bool(GestanteDuranteVacinacao)
                                     }
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        "linkId": "antecedentesSarsCov2",
-                        "item": [
+                            },
                             {
-                                "linkId": "diagnosticoprevioSarsCov2",
+                                "linkId": "embarazadaMomentoESAVI",
+                                "answer": [
+                                    {
+                                        "valueBoolean": bool(GestanteDuranteNotificacao)
+                                    }
+                                ]
+                            },
+
+                            {
+                                "linkId": "fechaUltimaMenstruacion",
+                                "answer": [
+                                    {
+                                        "valueDate": DataUltimaMenstruacao.date().isoformat()
+                                    }
+                                ]
+                            },
+                            {
+                                "linkId": "fechaProbableParto",
+                                "answer": [
+                                    {
+                                        "valueDate": DataParto.date().isoformat()
+                                    }
+                                ]
+                            },
+                            {
+                                "linkId": "edadGestacional",
+                                "answer": [
+                                    {
+                                        "valueInteger": int(IdadeGestacional)
+                                    }
+                                ]
+                            },
+                            {
+                                "linkId": "codigoMonitoreoPosteriorVacuna",
                                 "answer": [
                                     {
                                         "valueCoding": {
                                             "system": "https://paho.org/fhir/esavi/CodeSystem/RespuestaSiNoNosabeCS",
-                                            "code": str(int(DiagnosticoPrevio))
+                                            "code": str(int(CodigoMonitoreoPosteriorVacuna))
                                         }
                                     }
                                 ]
                             }
                         ]
                     }
-
                 ]
             },
             {
@@ -367,7 +395,7 @@ for index, row in df.iterrows():
                                         "valueInteger": int(IdentificadorVacina)
                                     }
                                 ]
-                            },
+                            },                            
                             {
                                 "linkId": "nombreFabricante",
                                 "answer": [
@@ -391,15 +419,7 @@ for index, row in df.iterrows():
                                         "valueString": Lote
                                     }
                                 ]
-                            },
-                            {
-                                "linkId": "fechaVencimientoVacuna",
-                                "answer": [
-                                    {
-                                        "valueDate": DataVencimento.date().isoformat()
-                                    }
-                                ]
-                            }
+                            }                            
                         ]
                     },
                     {
@@ -484,60 +504,6 @@ for index, row in df.iterrows():
                                 "answer": [
                                     {
                                         "valueBoolean": bool(GravidadeESAVI)
-                                    }
-                                ]
-                            },
-                            {
-                                "linkId": "gravMuerte",
-                                "text": "Muerte",
-                                "answer": [
-                                    {
-                                        "valueBoolean": bool(Gravidademorte)
-                                    }
-                                ]
-                            },
-                            {
-                                "linkId": "gravRiesgoVida",
-                                "text": "Amenaza la vida al momento de la detección del ESAVI",
-                                "answer": [
-                                    {
-                                        "valueBoolean": bool(GravidaderiscoVida)
-                                    }
-                                ]
-                            },
-                            {
-                                "linkId": "gravDiscapacidad",
-                                "text": "Genera discapacidad severa o permanente al momento de la detección",
-                                "answer": [
-                                    {
-                                        "valueBoolean": bool(Gravidadeincapacidade)
-                                    }
-                                ]
-                            },
-                            {
-                                "linkId": "gravHospitalizacion",
-                                "text": "Hospitalización o prolongación de la misma",
-                                "answer": [
-                                    {
-                                        "valueBoolean": bool(Gravidadehospitalizacao)
-                                    }
-                                ]
-                            },
-                            {
-                                "linkId": "gravAnomaliaCongenita",
-                                "text": "Anomalía congénita",
-                                "answer": [
-                                    {
-                                        "valueBoolean": bool(GravidadeanomaliaCongenita)
-                                    }
-                                ]
-                            },
-                            {
-                                "linkId": "otrosEventosImportantes",
-                                "text": "Otros Eventos considerados Médicamente Importantes",
-                                "answer": [
-                                    {
-                                        "valueBoolean": bool(OutroseventosImportantes)
                                     }
                                 ]
                             }
