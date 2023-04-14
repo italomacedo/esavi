@@ -4,8 +4,12 @@ import uuid
 import datetime
 import json
 
+SHEET_ID = '1kC-mPQm-Fvk8q6sxUW27CgHeNIWY__mFTiQ66jtKsYs'
+SHEET_NAME = 'sheet1'
+url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
+
 # Importamos el excel a un DataFrame
-df = pandas.read_excel('Questionnaire.xlsx', sheet_name='Questionário')
+df = pandas.read_csv(url)
 
 # Aseguramos igual cantidad de rows/columns
 df = df.reset_index()
